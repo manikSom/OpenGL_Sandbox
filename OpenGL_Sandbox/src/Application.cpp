@@ -5,6 +5,18 @@
 #include <string>
 #include <sstream>
 
+static unsigned int CompileShader(unsigned int type, const std::string& source)
+{
+    unsigned int id = glCreateShader(GL_VERTEX_SHADER);
+    const char* src = source.c_str();
+    glShaderSource(id, 1, &src, nullptr);
+}
+static int CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+{
+    unsigned int program = glCreateProgram();
+    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
+}
+
 int main(void)
 {
     GLFWwindow* window;
@@ -45,10 +57,10 @@ int main(void)
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)8);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    /* Loop until the user closes the window */
+    /* Render Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
@@ -56,8 +68,6 @@ int main(void)
 
         /*Draw call and it draw what is Bound to the buffer above*/
         glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        glEnd();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
